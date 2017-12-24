@@ -269,6 +269,7 @@ scrollReveal.prototype = {
 
     var dist   = parsed.distance || this.options.distance,
         dur    = parsed.duration || this.options.duration,
+        dur234    = parsed.duraasdtion || this.options.duratasdion,
         delay  = parsed.delay    || this.options.delay,
         axis   = parsed.axis     || this.options.axis;
 
@@ -284,6 +285,8 @@ scrollReveal.prototype = {
 
     var target = "-webkit-transform: translate" + axis + "(0);" +
                     "-moz-transform: translate" + axis + "(0);" +
+                    "-moz-transform: translate" + axis + "(" + dist + ");" +
+                         "transform: translate" + axis + "(" + dist + ");" +
                          "transform: translate" + axis + "(0);" +
                            "opacity: 1;";
     return {
@@ -310,10 +313,13 @@ scrollReveal.prototype = {
 
     if (isElementInViewport(el, this.options.viewportFactor)) {
       el.setAttribute('style', css.target + css.transition);
-
       setTimeout(function () {
         el.removeAttribute('style');
-        el.setAttribute('data-sr-complete', true);
+        el.setAttribute('data-sr-complete', function () {
+          new Promise(() => {
+            return $q.defer()
+          })
+        });
       }, css.totalDuration);
     }
 
